@@ -9,141 +9,49 @@
 # Deployer-Admin (can create,delete,update resources but not IAM users, Region Restricted)
 # Read-Only (can read stuff, Region Restricted,  MFA Restricted)
 
-data "aws_iam_policy_document" "require_mfa" {
-  statement {
-    sid    = "AllowAllUsersToListAccounts"
-    effect = "Allow"
-    actions = [
-      "iam:ListAccountAliases",
-      "iam:ListUsers",
-      "iam:ListVirtualMFADevices",
-      "iam:GetAccountPasswordPolicy",
-      "iam:GetAccountSummary"
-    ]
-    resources = ["*"]
-  }
-  statement {
-    sid    = "AllowIndividualUserToSeeAndManageOnlyTheirOwnAccountInformation"
-    effect = "Allow"
-    actions = [
-      "iam:ChangePassword",
-      "iam:CreateAccessKey",
-      "iam:CreateLoginProfile",
-      "iam:DeleteAccessKey",
-      "iam:DeleteLoginProfile",
-      "iam:GetLoginProfile",
-      "iam:ListAccessKeys",
-      "iam:UpdateAccessKey",
-      "iam:UpdateLoginProfile",
-      "iam:ListSigningCertificates",
-      "iam:DeleteSigningCertificate",
-      "iam:UpdateSigningCertificate",
-      "iam:UploadSigningCertificate",
-      "iam:ListSSHPublicKeys",
-      "iam:GetSSHPublicKey",
-      "iam:DeleteSSHPublicKey",
-      "iam:UpdateSSHPublicKey",
-      "iam:UploadSSHPublicKey"
-    ]
-    resources = ["arn:aws:iam::*:user/$${aws:username}"]
-  }
-  statement {
-    sid     = "AllowIndividualUserToListOnlyTheirOwnMFA"
-    effect  = "Allow"
-    actions = ["iam:ListMFADevices"]
-    resources = [
-      "arn:aws:iam::*:mfa/*",
-      "arn:aws:iam::*:user/$${aws:username}"
-    ]
-  }
-  statement {
-    sid    = "AllowIndividualUserToManageTheirOwnMFA"
-    effect = "Allow"
-    actions = [
-      "iam:CreateVirtualMFADevice",
-      "iam:DeleteVirtualMFADevice",
-      "iam:EnableMFADevice",
-      "iam:ResyncMFADevice"
-    ]
-    resources = [
-      "arn:aws:iam::*:mfa/$${aws:username}",
-      "arn:aws:iam::*:user/$${aws:username}"
-    ]
-  }
-  statement {
-    sid     = "AllowIndividualUserToDeactivateOnlyTheirOwnMFAOnlyWhenUsingMFA"
-    effect  = "Allow"
-    actions = ["iam:DeactivateMFADevice"]
-    resources = [
-      "arn:aws:iam::*:mfa/$${aws:username}",
-      "arn:aws:iam::*:user/$${aws:username}"
-    ]
-    condition {
-      test     = "Bool"
-      variable = "aws:MultiFactorAuthPresent"
-      values   = ["true"]
-    }
-  }
-  statement {
-    sid    = "BlockMostAccessUnlessSignedInWithMFA"
-    effect = "Deny"
-    not_actions = [
-      "iam:ChangePassword",
-      "iam:CreateLoginProfile",
-      "iam:CreateVirtualMFADevice",
-      "iam:ListVirtualMFADevices",
-      "iam:EnableMFADevice",
-      "iam:ResyncMFADevice",
-      "iam:ListAccountAliases",
-      "iam:ListUsers",
-      "iam:ListSSHPublicKeys",
-      "iam:ListAccessKeys",
-      "iam:ListServiceSpecificCredentials",
-      "iam:ListMFADevices",
-      "iam:GetAccountSummary",
-      "sts:GetSessionToken"
-    ]
-    resources = ["*"]
-    condition {
-      test     = "BoolIfExists"
-      variable = "aws:MultiFactorAuthPresent"
-      values   = ["false"]
-    }
-  }
+resource "aws_iam_group" "full_admin" {
+  name = "full-admin"
 }
 
-
-data "aws_iam_policy_document" "saml_assume" {
-  count = length(var.saml_provider_arn) > 0 ? 1 : 0
-  statement {
-    effect = "Allow"
-    principals {
-      type        = "Federated"
-      identifiers = [var.saml_provider_arn]
-    }
-    actions = ["sts:AssumeRoleWithSAML"]
-    condition {
-      test     = "StringEquals"
-      variable = "SAML:aud"
-      values   = ["https://signin.aws.amazon.com/saml"]
-    }
-  }
+resource "aws_iam_group_policy_attachment" "full_admin" {
+  group      = aws_iam_group.full_admin.name
+  policy_arn = aws_iam_policy.full_admin.arn
 }
 
-resource "aws_iam_role" "full_admin" {
-  count              = length(var.saml_provider_arn) > 0 ? 1 : 0
-  name               = "full-admin"
-  assume_role_policy = data.aws_iam_policy_document.saml_assume[count.index].json
+resource "aws_iam_group_policy_attachment" "full_admin_mfa" {
+  group      = aws_iam_group.full_admin.name
+  policy_arn = aws_iam_policy.require_mfa.arn
 }
 
-resource "aws_iam_role_policy_attachment" "full_admin" {
-  count = length(var.saml_provider_arn) > 0 ? 1 : 0
-
+resource "aws_iam_group" "ops_admin" {
+  name = "ops-admin"
 }
 
-resource "aws_iam_role_policy" "full_admin" {
-  count  = length(var.saml_provider_arn) > 0 ? 1 : 0
-  name   = "full-admin"
-  role   = aws_iam_role.full_admin[count.index].id
-  policy = data.aws_iam_policy_document.require_mfa.json
+resource "aws_iam_group_policy_attachment" "ops_admin" {
+  group      = aws_iam_group.ops_admin.name
+  policy_arn = aws_iam_policy.partial_admin.arn
+}
+
+resource "aws_iam_group_policy_attachment" "ops_admin_iam" {
+  group      = aws_iam_group.ops_admin.name
+  policy_arn = aws_iam_policy.iam_admin.arn
+}
+
+resource "aws_iam_group_policy_attachment" "ops_admin_mfa" {
+  group      = aws_iam_group.ops_admin.name
+  policy_arn = aws_iam_policy.require_mfa.arn
+}
+
+resource "aws_iam_group" "resource_admin" {
+  name = "resource-admin"
+}
+
+resource "aws_iam_group_policy_attachment" "resource_admin" {
+  group      = aws_iam_group.resource_admin.name
+  policy_arn = aws_iam_policy.partial_admin.arn
+}
+
+resource "aws_iam_group_policy_attachment" "resource_admin_mfa" {
+  group      = aws_iam_group.resource_admin.name
+  policy_arn = aws_iam_policy.require_mfa.arn
 }
