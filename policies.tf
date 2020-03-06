@@ -2,7 +2,6 @@
 # IAM Policies #
 ################
 
-
 # saml_assume role policy documnent
 data "aws_iam_policy_document" "saml_assume" {
   statement {
@@ -20,9 +19,7 @@ data "aws_iam_policy_document" "saml_assume" {
   }
 }
 
-
 # require-mfa policy
-
 data "aws_iam_policy_document" "require_mfa" {
   statement {
     sid    = "AllowAllUsersToListAccounts"
@@ -126,14 +123,14 @@ data "aws_iam_policy_document" "require_mfa" {
   }
 }
 
+# require-mfa policy
 resource "aws_iam_policy" "require_mfa" {
   name        = "require-mfa"
   description = "Policy to force MFA usage"
   policy      = data.aws_iam_policy_document.require_mfa.json
 }
 
-# full-admin policy 
-
+# full-admin policy document
 data "aws_iam_policy_document" "full_admin" {
   statement {
     effect    = "Allow"
@@ -142,12 +139,14 @@ data "aws_iam_policy_document" "full_admin" {
   }
 }
 
+# full-admin policy
 resource "aws_iam_policy" "full_admin" {
   name        = "full-admin"
   description = "Policy to allow full administrative access"
   policy      = data.aws_iam_policy_document.full_admin.json
 }
 
+# partial-admin policy document
 data "aws_iam_policy_document" "partial_admin" {
   statement {
     sid    = "DenyPowerUserOutsideUS"
@@ -181,12 +180,14 @@ data "aws_iam_policy_document" "partial_admin" {
   }
 }
 
+# partial-admin policy
 resource "aws_iam_policy" "partial_admin" {
   name        = "partial-admin"
   description = "Policy to allow partial administrative access"
   policy      = data.aws_iam_policy_document.partial_admin.json
 }
 
+# iam-admin policy document
 data "aws_iam_policy_document" "iam_admin" {
   statment {
     effect    = "Allow"
@@ -195,6 +196,7 @@ data "aws_iam_policy_document" "iam_admin" {
   }
 }
 
+# iam-admin policy
 resource "aws_iam_policy" "iam_admin" {
   name        = "iam-admin"
   description = "Policy to allow IAM administration"
