@@ -17,9 +17,9 @@ output "full_admin_role_arn" {
 output "ops_admin_role_arn" {
   value = length(var.saml_provider_arn) > 0 ? aws_iam_role.ops_admin.arn : ""
 }
-output "resource_admin_group_arn" {
+output "resource_admin_role_arn" {
   value = length(var.saml_provider_arn) > 0 ? aws_iam_role.resource_admin.arn : ""
 }
-output "deployer_admin_group_arn" {
+output "deployer_admin_role_arn" {
   value = length(var.saml_provider_arn) > 0 ? aws_iam_role.deployer_admin.arn : ""
 }
