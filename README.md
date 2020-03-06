@@ -33,6 +33,7 @@ Control    | CSP/AWS | HOST/OS | App/DB | How is it implemented?
 | require-mfa | Forces multi-factor authentiation usage before privileges are granted |
 | partial-admin | Allows region-restricted administrator access (excluding IAM, Organizations, and sts:AssumeRole) |
 | iam-admin | Allows administrator access to IAM |
+| ReadOnlyAccess | Allows read only access to the AWS environment |
 
 ### Groups
 
@@ -41,7 +42,8 @@ Control    | CSP/AWS | HOST/OS | App/DB | How is it implemented?
 | full-admin | `full-admin` `require-mfa` |
 | ops-admin | `partial-admin` `iam-admin` `require-mfa` |
 | resource-admin | `partial-admin` `require-mfa` |
-| deployer-admin | `partial-admin` |
+| deployer-admin | `full-admin` |
+| read-only | `ReadOnlyAccess` |
 
 
 ### Roles
@@ -53,7 +55,8 @@ Roles are only created if the saml_provider_arn is provided. This is useful if y
 | full-admin | `full-admin` `require-mfa` |
 | ops-admin | `partial-admin` `iam-admin` `require-mfa` |
 | resource-admin | `partial-admin` `require-mfa` |
-| deployer-admin | `partial-admin` |
+| deployer-admin | `full-admin` |
+| read-only | `ReadOnlyAccess` |
 
 [top](#top)
 
@@ -106,10 +109,12 @@ module "iam" {
 | ops_admin_group_arn | The ARN of the ops-admin IAM group |
 | resource_admin_group_arn | The ARN of the resource-admin IAM group |
 | deployer_admin_group_arn | The ARN of the deployer-admin IAM group |
+| read_only_group_arn | The ARN of the read-only IAM group |
 | full_admin_role_arn | The ARN of the full-admin IAM role (requires saml_provider_arn) |
 | ops_admin_role_arn | The ARN of the ops-admin IAM role (requires saml_provider_arn) |
-| resource_admin_group_arn | The ARN of the resource-admin IAM role (requires saml_provider_arn) |
-| deployer_admin_group_arn | The ARN of the deployer-admin IAM role (requires saml_provider_arn) |
+| resource_admin_role_arn | The ARN of the resource-admin IAM role (requires saml_provider_arn) |
+| deployer_admin_role_arn | The ARN of the deployer-admin IAM role (requires saml_provider_arn) |
+| read_only_role_arn | The ARN of the read-only IAM role (requires saml_provider_arn) |
 
 [top](#top)
 

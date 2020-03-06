@@ -64,8 +64,19 @@ resource "aws_iam_group" "deployer_admin" {
   name = "deployer-admin"
 }
 
-# attach partial-admin policy to deployer-admin group
+# attach full-admin policy to deployer-admin group
 resource "aws_iam_group_policy_attachment" "deployer_admin" {
   group      = aws_iam_group.deployer_admin.name
-  policy_arn = aws_iam_policy.partial_admin.arn
+  policy_arn = aws_iam_policy.full_admin.arn
+}
+
+# read-only group
+resource "aws_iam_group" "read_only" {
+  name = "read-only"
+}
+
+# attach ReadOnlyAccess policy to read-only group
+resource "aws_iam_group_policy_attachment" "read_only" {
+  group      = aws_iam_group.read_only.name
+  policy_arn = data.aws_iam_policy.read_only.arn
 }

@@ -72,9 +72,23 @@ resource "aws_iam_role" "deployer_admin" {
   assume_role_policy = data.aws_iam_policy_document.saml_assume.json
 }
 
-# attach partial-admin policy to deployer-admin role
+# attach full-admin policy to deployer-admin role
 resource "aws_iam_role_policy_attachment" "deployer_admin" {
   count      = length(var.saml_provider_arn) > 0 ? 1 : 0
   role       = aws_iam_role.deployer_admin[0].name
-  policy_arn = aws_iam_policy.partial_admin.arn
+  policy_arn = aws_iam_policy.full_admin.arn
+}
+
+# read-only role
+resource "aws_iam_role" "read_only" {
+  count              = length(var.saml_provider_arn) > 0 ? 1 : 0
+  name               = "read-only"
+  assume_role_policy = data.aws_iam_policy_document.saml_assume.json
+}
+
+# attach ReadOnlyAccess policy to read-only role
+resource "aws_iam_role_policy_attachment" "read_only" {
+  count      = length(var.saml_provider_arn) > 0 ? 1 : 0
+  role       = aws_iam_role.read_only[0].name
+  policy_arn = data.aws_iam_policy.read_only.arn
 }

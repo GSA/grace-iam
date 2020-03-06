@@ -19,6 +19,11 @@ data "aws_iam_policy_document" "saml_assume" {
   }
 }
 
+# ReadOnlyAccess policy
+data "aws_iam_policy" "read_only" {
+  arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+}
+
 # require-mfa policy
 data "aws_iam_policy_document" "require_mfa" {
   statement {
