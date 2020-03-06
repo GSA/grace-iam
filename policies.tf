@@ -189,7 +189,7 @@ resource "aws_iam_policy" "partial_admin" {
 
 # iam-admin policy document
 data "aws_iam_policy_document" "iam_admin" {
-  statment {
+  statement {
     effect    = "Allow"
     actions   = ["iam:*"]
     resources = ["*"]

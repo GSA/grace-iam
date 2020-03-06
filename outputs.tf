@@ -12,14 +12,14 @@ output "deployer_admin_group_arn" {
 }
 
 output "full_admin_role_arn" {
-  value = length(var.saml_provider_arn) > 0 ? aws_iam_role.full_admin.arn : ""
+  value = length(var.saml_provider_arn) > 0 ? aws_iam_role.full_admin[0].arn : ""
 }
 output "ops_admin_role_arn" {
-  value = length(var.saml_provider_arn) > 0 ? aws_iam_role.ops_admin.arn : ""
+  value = length(var.saml_provider_arn) > 0 ? aws_iam_role.ops_admin[0].arn : ""
 }
 output "resource_admin_role_arn" {
-  value = length(var.saml_provider_arn) > 0 ? aws_iam_role.resource_admin.arn : ""
+  value = length(var.saml_provider_arn) > 0 ? aws_iam_role.resource_admin[0].arn : ""
 }
 output "deployer_admin_role_arn" {
-  value = length(var.saml_provider_arn) > 0 ? aws_iam_role.deployer_admin.arn : ""
+  value = length(var.saml_provider_arn) > 0 ? aws_iam_role.deployer_admin[0].arn : ""
 }
