@@ -12,7 +12,7 @@ GRACE IAM provides a basic configuration for AWS Identity and Access Management 
 - [Terraform Module Outputs](#terraform-module-outputs)
 
 ## Security Compliance
-TODO
+The GRACE IAM subcomponent provides various levels of coverage for several [NIST Special Publication 800-53 (Rev. 4) Security Controls](https://nvd.nist.gov/800-53/Rev4/impact/moderate).  These security controls are designated for [FIPS 199 Moderate Impact Systems](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.199.pdf). Additional information regarding the implementation method utilized can be found within the [GRACE Component Control Coverage Repository](https://github.com/GSA/grace-ssp/blob/master/README.md).
 
 **Component ATO status:** draft
 
@@ -20,6 +20,13 @@ TODO
 
 Control    | CSP/AWS | HOST/OS | App/DB | How is it implemented?
 ---------- | ------- | ------- | ------ | ----------------------
+[AC-3](https://nvd.nist.gov/800-53/Rev4/control/AC-3) | ╳ | | | The use of IAM groups, roles, and policies are utilized to enforce logical access to the system and provide permissions to perform specific actions on specific AWS resources and services.
+[AC-5(a)](https://nvd.nist.gov/800-53/Rev4/control/AC-5) | ╳ | | | The use of IAM groups, roles, and policies are utilized to enforce the separation of duties of individuals.
+[IA-2(1)](https://nvd.nist.gov/800-53/Rev4/control/IA-2#enhancement-1) | ╳ | | | The [require_mfa](https://github.com/GSA/grace-iam/blob/master/policies.tf) IAM policy is used to enforce multifactor authentication for privileged users of the information system.
+[IA-2(3)](https://nvd.nist.gov/800-53/Rev4/control/IA-2#enhancement-3) | ╳ | | | The [require_mfa](https://github.com/GSA/grace-iam/blob/master/policies.tf) IAM policy is used to enforce multifactor authentication for privileged users of the information system.
+[IA-2(11)](https://nvd.nist.gov/800-53/Rev4/control/IA-2#enhancement-11) | ╳ | | | The [require_mfa](https://github.com/GSA/grace-iam/blob/master/policies.tf) IAM policy is used in conjunction with virtual MFA devices or authenticator applications such as  Google Authenticator. These virtual MFA applications are installed on smartphone devices and are used to provide the secondary factor information for completing authentication.
+[IA-5(1)](https://nvd.nist.gov/800-53/Rev4/control/IA-5#enhancement-1) | ╳ | | | The IAM [password_policy](https://github.com/GSA/grace-iam/blob/master/iam.tf) enforces a minimum password length, complexity, maximum lifetime, reuse parameter, and requires the user to change their initial account setup password upon first login.  
+
 
 [top](#top)
 
@@ -30,7 +37,7 @@ Control    | CSP/AWS | HOST/OS | App/DB | How is it implemented?
 |Name|Purpose|
 |----|-------|
 | full-admin | Allows full administrator access |
-| require-mfa | Forces multi-factor authentiation usage before privileges are granted |
+| require-mfa | Forces multi-factor authentication usage before privileges are granted |
 | partial-admin | Allows region-restricted administrator access (excluding IAM, Organizations, and sts:AssumeRole) |
 | iam-admin | Allows administrator access to IAM |
 | ReadOnlyAccess | Allows read only access to the AWS environment |
