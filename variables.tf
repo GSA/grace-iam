@@ -5,7 +5,7 @@ variable "saml_provider_arn" {
 }
 
 variable "allowed_regions" {
-  type        = list
+  type        = list(any)
   description = "(optional) A list of the allowed regions (defaults to [\"us-east-1\", \"us-west-1\"])"
   default     = ["us-east-1", "us-west-1"]
 }
