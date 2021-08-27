@@ -1,17 +1,17 @@
 output "full_admin_group_arn" {
-  value = aws_iam_group.full_admin.arn
+  value = var.create_iam_groups ? aws_iam_group.full_admin[0].arn : ""
 }
 output "ops_admin_group_arn" {
-  value = aws_iam_group.ops_admin.arn
+  value = var.create_iam_groups ? aws_iam_group.ops_admin[0].arn : ""
 }
 output "resource_admin_group_arn" {
-  value = aws_iam_group.resource_admin.arn
+  value = var.create_iam_groups ? aws_iam_group.resource_admin[0].arn : ""
 }
 output "deployer_admin_group_arn" {
-  value = aws_iam_group.deployer_admin.arn
+  value = var.create_iam_groups ? aws_iam_group.deployer_admin[0].arn : ""
 }
 output "ready_only_group_arn" {
-  value = aws_iam_group.read_only.arn
+  value = var.create_iam_groups ? aws_iam_group.read_only[0].arn : ""
 }
 
 output "full_admin_role_arn" {

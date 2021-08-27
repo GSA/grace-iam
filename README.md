@@ -44,6 +44,9 @@ Control    | CSP/AWS | HOST/OS | App/DB | How is it implemented?
 
 ### Groups
 
+These groups are created by default. You can set `create_iam_groups = false` to
+prevent the creation of these groups.
+
 |Name|Policies|
 |----|-------|
 | full-admin | `full-admin` `require-mfa` |
@@ -96,6 +99,7 @@ module "iam" {
 |------|-------------|:----:|:-----:|:-----:|
 | saml_provider_arn | The AWS Resource Name (ARN) for the Security Assertion Markup Language (SAML) provider | string | "" | no |
 | allowed_regions | A list of the allowed regions | list | us-east-1, us-west-1 | no |
+| create_iam_groups | the boolean value indicating whether to create IAM groups | bool | true | no |
 | password_policy_min_length | the number representing the minimum password length | number | 16 | no |
 | password_policy_require_uppercase | the boolean value indicating whether to require uppercase characters in passwords | bool | true | no |
 | password_policy_require_lowercase | the boolean value indicating whether to require lowercase characters in passwords | bool | true | no |
