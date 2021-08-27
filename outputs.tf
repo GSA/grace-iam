@@ -14,6 +14,19 @@ output "ready_only_group_arn" {
   value = aws_iam_group.read_only.arn
 }
 
+output "full_admin_policy_arn" {
+  value = aws_iam_policy.full_admin.arn
+}
+output "iam_admin_policy_arn" {
+  value = aws_iam_policy.iam_admin.arn
+}
+output "partial_admin_policy_arn" {
+  value = aws_iam_policy.partial_admin.arn
+}
+output "require_mfa_policy_arn" {
+  value = aws_iam_policy.require_mfa.arn
+}
+
 output "full_admin_role_arn" {
   value = length(var.saml_provider_arn) > 0 ? aws_iam_role.full_admin[0].arn : ""
 }

@@ -117,6 +117,10 @@ module "iam" {
 | resource_admin_group_arn | The ARN of the resource-admin IAM group |
 | deployer_admin_group_arn | The ARN of the deployer-admin IAM group |
 | read_only_group_arn | The ARN of the read-only IAM group |
+| full_admin_policy_arn | The ARN of the full-admin IAM policy |
+| iam_admin_policy_arn | The ARN of the iam-admin IAM policy |
+| partial_admin_policy_arn | The ARN of the partial-admin IAM policy |
+| require_mfa_policy_arn | The ARN of the require-mfa IAM policy |
 | full_admin_role_arn | The ARN of the full-admin IAM role (requires saml_provider_arn) |
 | ops_admin_role_arn | The ARN of the ops-admin IAM role (requires saml_provider_arn) |
 | resource_admin_role_arn | The ARN of the resource-admin IAM role (requires saml_provider_arn) |
