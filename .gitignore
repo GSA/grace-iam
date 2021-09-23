@@ -4,6 +4,7 @@
 *.tfstate*
 # Module directory
 .terraform/
+.repo/
 
 ## Go ##
 vendor/

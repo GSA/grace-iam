@@ -136,10 +136,11 @@ resource "aws_iam_policy" "require_mfa" {
 }
 
 # full-admin policy document
+#tfsec:ignore:AWS099
 data "aws_iam_policy_document" "full_admin" {
   statement {
     effect    = "Allow"
-    actions   = ["*"] #tfsec:ignore:AWS046
+    actions   = ["*"]
     resources = ["*"]
   }
 }
@@ -152,6 +153,7 @@ resource "aws_iam_policy" "full_admin" {
 }
 
 # partial-admin policy document
+#tfsec:ignore:AWS099
 data "aws_iam_policy_document" "partial_admin" {
   statement {
     sid    = "DenyPowerUserOutsideUS"
@@ -193,6 +195,7 @@ resource "aws_iam_policy" "partial_admin" {
 }
 
 # iam-admin policy document
+#tfsec:ignore:AWS099
 data "aws_iam_policy_document" "iam_admin" {
   statement {
     effect    = "Allow"
