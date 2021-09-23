@@ -10,6 +10,12 @@ variable "allowed_regions" {
   default     = ["us-east-1", "us-west-1"]
 }
 
+variable "create_iam_groups" {
+  type        = bool
+  description = "(optional) the boolean value indicating whether to create IAM groups"
+  default     = true
+}
+
 variable "password_policy_min_length" {
   type        = number
   description = "(optional) the number representing the minimum password length"
